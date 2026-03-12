@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LatSync — Runtime Communication Governance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06090E;--bg1:#0B1018;--bg2:#111820;--bg3:#1A2332;--blue:#2563EB;--blue-l:#3B82F6;--blue-g:rgba(37,99,235,.10);--red:#DC2626;--red-g:rgba(220,38,38,.07);--white:#F0F4F8;--t1:#E2E8F0;--t2:#94A3B8;--t3:#64748B;--bdr:rgba(37,99,235,.15);--font:'Plus Jakarta Sans',-apple-system,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--t1);font-family:var(--font);font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 40px;background:rgba(6,9,14,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr)}.nav-brand{display:flex;align-items:center;gap:10px}.nav-logo{width:28px;height:28px}.nav-logo svg{width:100%;height:100%}.nav-name{font-weight:700;font-size:17px;color:var(--white)}.nav-tag{font-size:11px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;margin-left:6px}.nav-links{display:flex;gap:24px;align-items:center}.nav-links a{color:var(--t2);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--white)}
+.btn{display:inline-block;padding:10px 22px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s}.btn-s{background:var(--blue);color:#fff}.btn-s:hover{background:var(--blue-l)}.btn-o{border:1px solid var(--bdr);color:var(--t2)}.btn-o:hover{border-color:var(--blue);color:var(--white)}
+.hero{padding:110px 40px 40px;max-width:1200px;margin:0 auto}.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}.hero-tag::before{content:'';width:24px;height:2px;background:var(--blue)}.hero h1{font-size:clamp(32px,4.5vw,56px);font-weight:800;line-height:1.1;color:var(--white);margin-bottom:16px;max-width:850px}.hero h1 em{font-style:normal;color:var(--blue)}.hero-sub{font-size:18px;color:var(--t2);line-height:1.55;max-width:700px;margin-bottom:24px}.hero-actions{display:flex;gap:14px}
+.stat-band{background:var(--bg1);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:22px 40px}.stat-row{display:flex;justify-content:center;max-width:1200px;margin:0 auto;flex-wrap:wrap}.stat-item{flex:1;min-width:120px;text-align:center;padding:0 16px;border-right:1px solid rgba(37,99,235,.1)}.stat-item:last-child{border-right:none}.stat-val{font-size:28px;font-weight:800;color:var(--blue);line-height:1.1}.stat-val.red{color:var(--red)}.stat-label{font-size:12px;color:var(--t3);margin-top:3px;font-weight:500}
+.s{padding:48px 40px;max-width:1200px;margin:0 auto}.s-dark{background:var(--bg1);max-width:100%;padding:48px 40px}.s-dark .si{max-width:1200px;margin:0 auto}.divider{height:1px;background:var(--bdr);max-width:1200px;margin:0 auto}.sh{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}.sh::before{content:'';width:16px;height:2px;background:var(--blue)}.st{font-size:clamp(24px,2.8vw,34px);font-weight:800;color:var(--white);line-height:1.15;margin-bottom:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:16px}.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px}@media(max-width:900px){.three-col,.uc-grid{grid-template-columns:1fr 1fr!important}}@media(max-width:768px){.two-col,.scen-grid,.fg{grid-template-columns:1fr!important}.steps{grid-template-columns:1fr!important}.three-col,.uc-grid{grid-template-columns:1fr!important}}
+.card{background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;padding:20px;border-left:3px solid var(--blue)}.card-red{border-left-color:var(--red)}.card h3{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px}.card p{font-size:15px;color:var(--t2);line-height:1.5}
+.co{border-radius:8px;padding:18px 22px;margin-top:16px}.co-red{background:var(--red-g);border:1px solid rgba(220,38,38,.2)}.co-blue{background:var(--blue-g);border:1px solid var(--bdr)}.co-dark{background:var(--bg2);border:1px solid var(--bdr)}.co-navy{background:var(--bg3);border:1px solid var(--bdr)}.co h4{font-size:14px;font-weight:700;margin-bottom:5px}.co h4.red{color:var(--red)}.co h4.blue{color:var(--blue)}.co h4.wh{color:var(--white)}.co p{font-size:15px;color:var(--t2);line-height:1.5}.co p strong{color:var(--white)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.feat{background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;padding:18px}.feat-n{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px;letter-spacing:.06em}.feat h4{font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px}.feat p{font-size:14px;color:var(--t2);line-height:1.45}
+.scen-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.scen{background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;padding:20px;border-left:3px solid var(--blue)}.scen h4{font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px}.scen p{font-size:14px;color:var(--t2);line-height:1.5}
+.blist{list-style:none;padding:0}.blist li{font-size:15px;color:var(--t2);line-height:1.5;padding:5px 0 5px 16px;position:relative}.blist li::before{content:'';position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--blue)}.blist li strong{color:var(--white)}
+.steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px}.step{background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;padding:20px;border-top:3px solid var(--blue)}.step-n{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px}.step h4{font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px}.step p{font-size:14px;color:var(--t2);line-height:1.45}
+.uc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}.uc{background:var(--bg2);border:1px solid var(--bdr);border-radius:8px;padding:18px;border-top:2px solid var(--blue)}.uc h4{font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px}.uc p{font-size:13px;color:var(--t2);line-height:1.45}
+footer{padding:24px 40px;border-top:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:var(--bg)}footer span{font-size:12px;color:var(--t3)}.footer-brand{font-weight:700;color:var(--t2)}
+.cta-band{background:var(--bg1);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:40px;text-align:center}.cta-band h2{font-size:clamp(22px,2.5vw,32px);font-weight:800;color:var(--white);margin-bottom:10px}.cta-band p{font-size:16px;color:var(--t2);margin-bottom:20px;max-width:620px;margin-left:auto;margin-right:auto}.cta-actions{display:flex;gap:14px;justify-content:center}
+.form-grid{max-width:600px;margin:0 auto;display:grid;gap:14px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:560px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:4px}.form-group label{font-size:13px;font-weight:600;color:var(--t2)}
+.form-group input,.form-group select,.form-group textarea{background:var(--bg2);border:1px solid var(--bdr);border-radius:6px;padding:12px 14px;font-size:15px;color:var(--white);font-family:var(--font);outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue)}
+.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.form-group select option{background:var(--bg2);color:var(--white)}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-submit{display:inline-block;padding:14px 32px;border-radius:6px;font-size:16px;font-weight:700;background:var(--blue);color:#fff;border:none;cursor:pointer;font-family:var(--font);transition:background .2s;width:100%}.form-submit:hover{background:var(--blue-l)}
+.form-note{font-size:12px;color:var(--t3);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="sl"><rect x="0" y="0" width="12" height="24"/></clipPath></defs><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#2563EB" stroke="#2563EB" stroke-width="1.5" stroke-linejoin="round" clip-path="url(#sl)"/></svg></div>
+    <span class="nav-name">LatSync&#8482;</span>
+    <span class="nav-tag">Runtime Governance</span>
+  </div>
+  <div class="nav-links"><a href="#how">How It Works</a><a href="#proof">Proof</a><a href="#why">Differentiation</a><a href="#deploy">Deployment</a><a href="#usecases">Use Cases</a><a href="#contact">Contact</a><a href="#contact" class="btn btn-s">Request Demo</a></div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">A New Technology Category</div>
+  <h1>Authenticated doesn't mean governed.<br><em>Every breach lives in the gap between the two.</em></h1>
+  <p class="hero-sub">LatSync is a governance engine that runs on network infrastructure — switches, access points, gateways. It continuously evaluates every actor's behavior. No agents. No central controller. Every decision cryptographically evidenced. Working today on production hardware.</p>
+  <div class="hero-actions"><a href="#contact" class="btn btn-s">Request Demo</a><a href="#proof" class="btn btn-o">See the Proof</a></div>
+</div>
+
+<!-- NEW CATEGORY CALLOUT -->
+<div class="s-dark"><div class="si">
+  <div class="co co-navy" style="margin-top:0">
+    <h4 class="blue" style="font-size:16px;letter-spacing:.04em">RUNTIME COMMUNICATION GOVERNANCE IS A NEW TECHNOLOGY CATEGORY</h4>
+    <p style="margin-top:8px;font-size:16px;line-height:1.6">It is not network security. It is not monitoring. It is not access control. It fills the governance gap between authentication and detection that <strong>no existing product category addresses.</strong> Identity systems verify who you are. Monitoring systems watch what happened. LatSync governs what is happening — continuously, cryptographically, and without inspecting a single byte of content.</p>
+  </div>
+</div></div>
+
+<!-- STAT BAND -->
+<div class="stat-band"><div class="stat-row">
+  <div class="stat-item"><div class="stat-val red">241</div><div class="stat-label">Days to detect &amp; contain a breach<br>(IBM Cost of a Data Breach, 2025)</div></div>
+  <div class="stat-item"><div class="stat-val">644</div><div class="stat-label">Devices governed on a live network</div></div>
+  <div class="stat-item"><div class="stat-val">99.7%</div><div class="stat-label">Had zero governance of any kind</div></div>
+  <div class="stat-item"><div class="stat-val">3.6M</div><div class="stat-label">Behavioral observations — including<br>100% of previously ungoverned devices</div></div>
+  <div class="stat-item"><div class="stat-val">0</div><div class="stat-label">Agents installed on any device</div></div>
+</div></div>
+
+<!-- WHAT LATSYNC IS -->
+<div class="s" id="how">
+  <div class="sh">What LatSync Is</div>
+  <h2 class="st">The governance layer that sits between authentication and detection — where every breach lives.</h2>
+  <div class="two-col">
+    <div>
+      <p style="font-size:16px;color:var(--t2);line-height:1.6;margin-bottom:14px">Identity systems verify who you are at the gate. Monitoring systems watch after the fact. Between those two — in the 241 days it takes to detect a breach — nothing governs what devices actually do on the network. LatSync fills that gap.</p>
+      <p style="font-size:16px;color:var(--t2);line-height:1.6;margin-bottom:14px">Every other security system governs from the top down — central controller pushes policy to endpoints. LatSync governs from the bottom up. Each device governs itself. Compromise one, you get one. No central controller to take down.</p>
+      <div class="co co-red"><h4 class="red">NOT JUST DEVICES — EVERY ACTOR TYPE</h4><p>People, laptops, printers, cameras, USB peripherals, cellular base stations, satellites, AI agents, microservices. The substrate doesn't matter. The behavior does. One engine governs them all under one evidence chain.</p></div>
+    </div>
+    <div>
+      <div class="fg">
+        <div class="feat"><div class="feat-n">01</div><h4>Bilateral Authorization</h4><p>Both sides of every communication independently agree. Compromise one side — the other still protects itself.</p></div>
+        <div class="feat"><div class="feat-n">02</div><h4>Persistent State</h4><p>Trust history survives restarts and reconnections. Cryptographically chained. Cannot be reset. Cannot be tampered with.</p></div>
+        <div class="feat"><div class="feat-n">03</div><h4>Graduated Privilege</h4><p>Five tiers earned through behavior. Not assigned by admins. A suspicious camera keeps recording but can't reach external IPs.</p></div>
+        <div class="feat"><div class="feat-n">04</div><h4>Temporal Evaluation</h4><p>Trust decays without activity. Randomized MACs governed per-session and aged correctly. Time is a first-class governance signal.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SCENARIOS -->
+<div class="s">
+  <div class="sh">What This Looks Like</div>
+  <h2 class="st">Real enforcement. No human in the loop. No rules to write.</h2>
+  <div class="scen-grid">
+    <div class="scen"><h4>Guest WiFi &#8594; POS Protection</h4><p>A compromised device on guest WiFi tries to reach payment terminals. The access point detects behavioral deviation and revokes outbound access — before the first malicious packet reaches the POS network. No firewall rule. No SOC analyst. The AP did it. Evidence record generated automatically. PCI-DSS audit trail satisfied by architecture.</p></div>
+    <div class="scen"><h4>Medical Device Governance</h4><p>FDA-regulated infusion pumps cannot run third-party agents. No security vendor can touch them. LatSync governs them from the switch — fingerprinting behavior, scoring trust, constraining communication. Device-level governance without modifying a single medical device. Every decision HIPAA audit-ready.</p></div>
+    <div class="scen"><h4>Venue &amp; PWA Governance</h4><p>A customer walks in, connects to WiFi, opens the app. The enrollment portal governs their device under a pre-registered behavioral profile. Any deviation from expected behavior is a governance signal. The app can optionally bundle a lightweight governance endpoint — making the customer's device a governed node. Live and running today.</p></div>
+    <div class="scen"><h4>2am Lateral Movement</h4><p>An employee's laptop starts scanning internal IPs at 2am. Trust score drops. Privilege degrades from Normal to Constrained automatically. Scanning continues — blocked entirely. Evidence chain shows exactly what happened and when. Mean time between anomaly and containment: zero. Enforcement IS the evaluation.</p></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PROOF -->
+<div class="s-dark" id="proof"><div class="si">
+  <div class="sh">Live Deployment Proof</div>
+  <h2 class="st">Deployed on a live network. No agents. No configuration changes. Here's what we found.</h2>
+  <p style="font-size:16px;color:var(--t2);line-height:1.6;margin-bottom:16px;max-width:800px">Within the first scan cycle, every active device across 7 subnets was discovered, fingerprinted, trust-scored, and placed under continuous behavioral governance. 3.6 million behavioral observations cryptographically chained across 10 distinct observation types — including 100% of the devices that had no security coverage before LatSync.</p>
+  <div class="co co-red"><h4 class="red">THE FINDING</h4><p><strong>99.7% of the 644 devices on a production network were communicating freely with no behavioral governance whatsoever.</strong> No baseline. No trust scoring. No cryptographic record of their activity. This is the current state of every network that doesn't have LatSync.</p></div>
+  <div class="co co-blue" style="margin-top:10px"><h4 class="blue">THE ADMINISTRATOR IS GOVERNED TOO</h4><p>Two operators were governed by the identical engine as every device — behavioral scoring, evidence chain, trust evaluation, privilege assignment. Every operator action generated a tamper-evident record. <strong>No other network security product governs the administrator.</strong></p></div>
+</div></div>
+
+<!-- COMPLIANCE -->
+<div class="s">
+  <div class="sh">Compliance &amp; Audit</div>
+  <h2 class="st">The infrastructure IS the audit trail. No separate compliance tool required.</h2>
+  <div class="two-col">
+    <div>
+      <p style="font-size:16px;color:var(--t2);line-height:1.6;margin-bottom:14px">Every governance decision, every trust evaluation, every operator action is recorded in a SHA-256 hash-chained evidence sequence. Append-only. Tamper-evident. Exportable. Forensic-grade.</p>
+      <p style="font-size:16px;color:var(--t2);line-height:1.6;margin-bottom:14px">The evidence chain incorporates device-specific entropy at derivation time. A forged chain requires the actual physical hardware — software alone cannot replicate it. The chain is physically anchored, not just cryptographically linked.</p>
+      <p style="font-size:16px;color:var(--t2);line-height:1.6">No manual audit assembly. No separate compliance product. The infrastructure produces the audit trail as a byproduct of governance. SOC 2, HIPAA, PCI-DSS, and GDPR audit requirements satisfied by architecture.</p>
+    </div>
+    <div>
+      <div class="co co-red"><h4 class="red">CONTENT INDEPENDENCE — A LEGAL MOAT</h4><p><strong>LatSync never inspects payload content. Ever.</strong> It governs behavioral patterns of infrastructure actors — never transaction amounts, patient records, account numbers, or message content. HIPAA, GDPR, ECPA, and wiretap statutes do not apply. Every competing product that performs deep packet inspection carries this regulatory exposure. LatSync does not.</p></div>
+      <div class="co co-blue" style="margin-top:10px"><h4 class="blue">TRUST LAUNDERING&#8482; PREVENTION</h4><p>Every other system lets a compromised device disconnect and reconnect with a clean session. LatSync prevents it. Behavioral history is persistent and cryptographically chained. Bad behavior has memory. <strong>The network never forgets.</strong></p></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WHY DIFFERENT -->
+<div class="s" id="why">
+  <div class="sh">Why Nothing Else Does This</div>
+  <h2 class="st">Every existing security system shares three structural properties. LatSync eliminates all three.</h2>
+  <div class="three-col">
+    <div class="card card-red"><h3>Authority is granted, then separately revoked</h3><p>In every other system, access is given at authentication and must be explicitly taken away. LatSync earns authority continuously — demonstrated through behavior, moment by moment.</p></div>
+    <div class="card card-red"><h3>Proof is assembled after the fact</h3><p>SIEM and forensics reconstruct what happened after the breach. LatSync generates cryptographic proof before enforcement — evidence is created at the moment of the decision, not after the damage.</p></div>
+    <div class="card card-red"><h3>Administrators can override protections</h3><p>Every security product has an admin bypass. LatSync governs the administrator with the same engine as every device. Every admin action generates a tamper-evident record. No exceptions.</p></div>
+  </div>
+  <div class="two-col" style="margin-top:16px">
+    <div>
+      <ul class="blist">
+        <li><strong>Identity systems</strong> (Zero Trust, NAC, MFA) verify who you are at the gate. Once admitted, governance stops. LatSync evaluates what you do after admission — continuously.</li>
+        <li><strong>Monitoring systems</strong> (SIEM, XDR, NDR) watch and alert but don't enforce. LatSync enforces — graduated privilege changes on behavioral triggers, automatically.</li>
+        <li><strong>Response systems</strong> (SOAR, EDR) react after damage occurs. LatSync constrains on the first anomalous packet, before damage spreads.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="co co-dark"><h4 class="wh" style="font-size:15px">For OEM Infrastructure Partners</h4><p style="margin-top:8px">Embed LatSync in your infrastructure. Every device your customers connect becomes a governed endpoint. Your cloud-managed network platforms, AI-driven management tools, and infrastructure-as-a-service offerings gain behavioral governance and a cryptographic evidence chain they cannot build themselves. LatSync doesn't replace your tools. <strong>It gives them teeth.</strong> Per-device licensing. Revenue grows with the customer's network.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- DEPLOYMENT MODELS -->
+<div class="s-dark" id="deploy"><div class="si">
+  <div class="sh">Deployment Models</div>
+  <h2 class="st">Runs where your infrastructure runs. No agents on anything it governs.</h2>
+  <div class="fg" style="grid-template-columns:1fr 1fr">
+    <div class="feat"><div class="feat-n">DATA PLANE</div><h4>Embedded in Infrastructure</h4><p>Runs as a governance service on switches, access points, and gateways. Sits in the data plane. Listens to everything. Every port and every wireless association becomes a governed boundary. The OEM integration path — governance ships inside the hardware your customers already buy.</p></div>
+    <div class="feat"><div class="feat-n">STANDALONE</div><h4>Software Daemon</h4><p>Deploys on any Linux or macOS host. Gateway-level governance — all traffic passing through is governed. 644 devices governed through a single gateway on a live network today. Zero cloud dependency. Each node operates autonomously.</p></div>
+    <div class="feat"><div class="feat-n">HARDENED</div><h4>Governance-First OS from USB</h4><p>Boots a hardened Linux kernel from USB with governance as a native OS primitive. The governance engine runs below the application layer. A compromised application cannot reach the governance engine because it is not in the application layer. Fundamentally different threat model.</p></div>
+    <div class="feat"><div class="feat-n">VENUE</div><h4>Progressive Web App Integration</h4><p>Enrollment portal governs customer devices under pre-registered behavioral profiles. Optionally bundles a lightweight governance agent — making the customer's device a governed node. Running today in production. Retail, hospitality, healthcare, any business with customer-facing WiFi.</p></div>
+  </div>
+</div></div>
+
+<!-- USE CASES -->
+<div class="s" id="usecases">
+  <div class="sh">Use Cases</div>
+  <h2 class="st">One governance engine. Every environment. Every actor type.</h2>
+  <div class="uc-grid">
+    <div class="uc"><h4>Data Center &amp; Cloud</h4><p>Every server, VM, and container governed from the switch layer. East-west traffic between workloads evaluated continuously. Compromised containers constrained before lateral movement begins. Evidence chain spans the entire infrastructure.</p></div>
+    <div class="uc"><h4>Retail &amp; POS</h4><p>Guest WiFi and payment networks on the same infrastructure — governed separately by behavior. A device on guest WiFi that attempts to reach payment terminals is constrained before the first packet arrives. PCI-DSS audit trail generated automatically.</p></div>
+    <div class="uc"><h4>Healthcare &amp; Medical Devices</h4><p>FDA-regulated devices that cannot run agents are governed from the network infrastructure. Behavioral fingerprinting, trust scoring, and communication constraints — without touching the device. Every governance decision HIPAA audit-ready.</p></div>
+    <div class="uc"><h4>SOC Integration</h4><p>The cryptographic evidence chain exports directly to your SIEM. LatSync doesn't replace your SOC — it feeds it governed, tamper-evident data. SOC analysts see behavioral governance events, not raw logs. Reduces alert fatigue. Accelerates incident response.</p></div>
+    <div class="uc"><h4>Home Network &amp; Consumer</h4><p>Runs as a listener on your home network. Every IoT device, smart TV, thermostat, and camera identified, fingerprinted, and behaviorally tracked. A compromised baby monitor that starts exfiltrating data is constrained automatically. No technical knowledge required.</p></div>
+    <div class="uc"><h4>IoT / HVAC / Building Systems</h4><p>Thermostats, access control panels, lighting systems, environmental sensors — governed without agents. Behavioral baselines built from actual observed communication. Deviation from expected patterns triggers automatic trust degradation.</p></div>
+    <div class="uc"><h4>Hospitality &amp; Venue</h4><p>Guests with randomized MACs governed per-session. Returning loyalty members recognized through behavioral credentials — no centralized customer database. Guest WiFi becomes a governed asset. Every session produces an evidence record.</p></div>
+    <div class="uc"><h4>RAN &amp; Cellular Networks</h4><p>5G base stations, UE devices, handover events, and O-RAN controllers governed as behavioral actors with trust history. Rogue base stations detected by behavioral deviation. Man-in-the-middle protection through governance — not signatures.</p></div>
+    <div class="uc"><h4>USSD &amp; Mobile Payments</h4><p>Behavioral governance for USSD-based financial infrastructure. Governs carrier actor patterns without inspecting transaction content — amounts, account numbers, and PINs are never visible to the governance engine. Regulatory-clean in every jurisdiction.</p></div>
+    <div class="uc"><h4>Embedded OEM Licensing</h4><p>Infrastructure vendors embed LatSync in their hardware. Every device their customers connect becomes a governed endpoint. Cloud management platforms and AI-driven network tools gain behavioral governance they cannot build themselves. Per-device recurring revenue.</p></div>
+    <div class="uc"><h4>Air-Gapped &amp; Sovereign</h4><p>Full governance capability with zero cloud dependency. No phone-home. No external data flow. Each governed node operates autonomously with its own evidence chain. Designed for classified, military, and critical infrastructure environments.</p></div>
+    <div class="uc"><h4>AI Agent Governance</h4><p>AI agents are first-class governed entities. An AI agent's network communications are evaluated against behavioral baselines just like any other actor. An agent that starts communicating with unexpected endpoints is constrained. The evidence chain records every AI-to-infrastructure interaction.</p></div>
+  </div>
+</div>
+
+<!-- IP BAND -->
+<div class="stat-band"><div class="stat-row">
+  <div class="stat-item"><div class="stat-val">5</div><div class="stat-label">Patent filings</div></div>
+  <div class="stat-item"><div class="stat-val">657</div><div class="stat-label">Total claims</div></div>
+  <div class="stat-item"><div class="stat-val">65K+</div><div class="stat-label">Lines production Rust</div></div>
+  <div class="stat-item"><div class="stat-val">829</div><div class="stat-label">Tests passing</div></div>
+  <div class="stat-item"><div class="stat-val" style="font-size:20px;line-height:1.3">Live</div><div class="stat-label">Production deployment</div></div>
+</div></div>
+
+<!-- ENGAGEMENT -->
+<div class="s">
+  <div class="sh">Engagement</div>
+  <h2 class="st">Working production code. Not a roadmap. Not a pitch deck.</h2>
+  <div class="steps">
+    <div class="step"><div class="step-n">STEP 1</div><h4>Live Demonstration</h4><p>30-minute session on a live network. Attack scenario with autonomous containment. Evidence chain walkthrough. Ungoverned device identification across your subnets.</p></div>
+    <div class="step"><div class="step-n">STEP 2</div><h4>Architecture Review</h4><p>Under NDA. Integration mapping for your infrastructure. Engineering deep-dive into bilateral authorization. IP discussion at claim level. Competitive moat analysis.</p></div>
+    <div class="step"><div class="step-n">STEP 3</div><h4>90-Day Pilot &#8594; License</h4><p>Deploy in your environment. Per-device royalty, annual license, or joint development. OEM embedding available. Full IP retained by LatSync.</p></div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="s-dark" id="contact"><div class="si">
+  <div class="sh">Contact</div>
+  <h2 class="st" style="text-align:center">99.7% of a production network was ungoverned.<br>Your network? It's 100% — because you don't have LatSync.</h2>
+  <p style="font-size:16px;color:var(--t2);text-align:center;margin-bottom:24px;max-width:600px;margin-left:auto;margin-right:auto">We deploy against your live network with zero agents and zero configuration changes. Tell us what you're looking for.</p>
+  <form class="form-grid" action="https://formspree.io/f/xeerkayw" method="POST">
+    <div class="form-row">
+      <div class="form-group"><label>Name</label><input type="text" name="name" required placeholder="Your name"></div>
+      <div class="form-group"><label>Company</label><input type="text" name="company" required placeholder="Company name"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Email</label><input type="email" name="email" required placeholder="you@company.com"></div>
+      <div class="form-group"><label>Phone (optional)</label><input type="tel" name="phone" placeholder="Phone number"></div>
+    </div>
+    <div class="form-group"><label>I'm interested in</label>
+      <select name="interest" required>
+        <option value="" disabled selected>Select one</option>
+        <option value="demo">Live Demonstration</option>
+        <option value="partnership">Partnership / OEM</option>
+        <option value="licensing">Licensing</option>
+        <option value="investor">Investor Inquiry</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Message (optional)</label><textarea name="message" placeholder="Tell us about your environment, what you're looking for, or any questions."></textarea></div>
+    <button type="submit" class="form-submit">Submit</button>
+    <p class="form-note">We'll respond within 24 hours. Your information is confidential.</p>
+  </form>
+</div></div>
+
+<footer>
+  <span class="footer-brand">LatSync&#8482; Inc.</span>
+  <span>Runtime Communication Governance &middot; 5 Pat
